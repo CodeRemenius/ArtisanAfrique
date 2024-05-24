@@ -1,0 +1,45 @@
+{% extends 'userprofile/base.html' %}
+
+{% block title %}Deal History{% endblock %}
+
+{% block content %}
+    <h2 class="text-2xl font-semibold mt-8 mb-4">Deal History</h2>
+
+    <div class="flex flex-wrap border-b border-gray-200 py-2">
+        <div class="w-1/4">
+            <strong>Order ID</strong>
+        </div>
+
+        <div class="w-1/4">
+            <strong>Title</strong>
+        </div>
+
+        <div class="w-1/4">
+            <strong>Quantity</strong>
+        </div>
+
+        <div class="w-1/4">
+            <strong>Total Cost (NGN)</strong>
+        </div>
+    </div>
+
+    {% for order_item in order_items %}
+        <div class="flex flex-wrap items-center border-b border-gray-200 py-2">
+            <div class="w-1/4">
+                <a href="{% url 'my_store_order_detail' order_item.order.id %}" class="text-blue-500 hover:underline">{{ order_item.order.id}}</a>
+            </div>
+
+            <div class="w-1/4">
+                {{ order_item.product.title }}
+            </div>
+            
+            <div class="w-1/4 flex pl-6">
+                {{ order_item.quantity }}
+            </div>
+
+            <div class="w-1/4 flex pl-6">
+                ₦{{ order_item.haggled_price }}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+<div class="container mx-auto">
+    <h1 class="text-2xl font-bold mb-4">Edit Profile</h1>
+    {% if messages %}
+    <div class="mb-4">
+        <ul class="messages">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label for="username" class="block text-gray-600 text-xs font-bold mb-1">Username</label>
+            <input type="text" class="input-field" id="username" name="username"
+                value="{{ user_profile.username }}" oninput="checkForm()">
+        </div>
+        <div class="mb-4">
+            <label for="email" class="block text-gray-600 text-xs font-bold mb-1">Email</label>
+            <input type="email" class="input-field" id="email" name="email" value="{{ user_profile.email }}"
+                oninput="checkForm()">
+        </div>
+        <div class="mb-4">
+            <label for="phone" class="block text-gray-600 text-xs font-bold mb-1">Phone Number</label>
+            <input type="tel" class="input-field" id="phone" name="phone"
+                value="{{ user_profile.phone }}" oninput="checkForm()">
+        </div>
+        <div class="mb-4">
+            <label for="address" class="block text-gray-600 text-xs font-bold mb-1">Address</label>
+            <input type="text" class="input-field" id="address" name="address"
+                value="{{ user_profile.address }}" oninput="checkForm()">
+        </div>
+        <div class="mb-4">
+            <label for="profile_picture" class="block text-gray-600 text-xs font-bold mb-1">Profile Picture</label>
+            <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
+        </div>
+        <button type="submit" id="editProfileButton"
+            class="button-primary w-full py-2 rounded-lg focus:outline-none focus:shadow-outline"
+            disabled>Save Changes</button>
+    </form>
+</div>
+<style>
+    .container {
+        max-width: 480px;
+        margin: 0 auto;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        transition: border-color 0.3s ease;
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: #4a90e2;
+    }
+
+    .button-primary {
+        background-color: #4a90e2;
+        color: #fff;
+        transition: background-color 0.3s ease;
+    }
+
+    .button-primary:hover {
+        background-color: #055999;
+    }
+</style>
+<script>
+    function checkForm() {
+        var fullname = document.getElementById("username").value;
+        var email = document.getElementById("email").value;
+        var phone = document.getElementById("phone").value;
+        var address = document.getElementById("address").value;
+        var editProfileButton = document.getElementById("editProfileButton");
+
+        // Regular expression for phone number format (10 digits)
+        var phoneRegex = /^\d{10}$/;
+
+        if (fullname.trim() !== "" && email.trim() !== "" && phoneRegex.test(phone) && address.trim() !== "") {
+            editProfileButton.disabled = false; // Enable the button
+        } else {
+            editProfileButton.disabled = true; // Disable the button
+        }
+    }
+</script>
+
+{% endblock %}

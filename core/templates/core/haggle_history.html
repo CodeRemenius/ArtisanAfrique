@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %}
+{% block title %}Haggle History{% endblock %}
+
+{% block content %}
+<table class="min-w-full">
+  <thead>
+    <tr>
+      <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Product Name</th>
+      <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Initial Price</th>
+      <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Haggled Price</th>
+      <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Status</th>
+    </tr>
+  </thead>
+  <tbody class="bg-white">
+    {% for haggle in haggles %}
+    <tr>
+      <td class="px-6 py-4 whitespace-no-wrap">{{ haggle.product.title }}</td>
+      <td class="px-6 py-4 whitespace-no-wrap">NGN {{ haggle.product.price }}</td>
+      <td class="px-6 py-4 whitespace-no-wrap">NGN {{ haggle.proposed_price }}</td>
+      <td class="px-6 py-4 whitespace-no-wrap">{% if haggle.is_accepted %}Accepted{% elif haggle.is_rejected %}Rejected {% else %}Pending {% endif %}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

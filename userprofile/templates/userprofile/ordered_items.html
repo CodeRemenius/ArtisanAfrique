@@ -1,0 +1,62 @@
+{% extends 'userprofile/base.html' %}
+
+{% block title %}My Orders{% endblock %}
+
+{% block content %}
+    <h2 class="mt-6 text-xl">My orders</h2>
+
+    <div class="flex flex-wrap">
+        <div class="w-1/5">
+            <strong>Order ID</strong>
+        </div>
+
+        <div class="w-1/5">
+            <strong>Title</strong>
+        </div>
+
+        <div class="w-1/5">
+            <strong>Quantity</strong>
+        </div>
+
+        <div class="w-1/5">
+            <strong>Total Cost (NGN)</strong>
+        </div>
+
+        <div class="w-1/5 mt-2">
+            <strong>Actions</strong>
+        </div>
+    </div>
+
+    {% for order_item in order_items %}
+        <div class="flex flex-wrap items-center">
+            <div class="w-1/5">
+                <a href="{% url 'my_store_order_detail' order_item.order.id %}">{{ order_item.order.id}}</a>
+            </div>
+
+            <div class="w-1/5">
+                {{ order_item.product.title }}
+            </div>
+
+            <div class="w-1/5">
+                {{ order_item.quantity }}
+            </div>
+
+            <div class="w-1/5">
+                ₦{{ order_item.total_cost }}
+            </div>
+
+            <div class="w-1/5 mt-2 flex justify-between">
+                <form method="post" action="{% url 'my_orders' %}">
+                    {% csrf_token %}
+                    <button type="submit" name="delete_order_item" value="{{ order_item.id }}" class="px-4 py-2 bg-red-500 text-white hover:bg-red-700">
+                        Delete
+                    </button>
+                    <button type="submit" name="mark_delivered" value="{{ order_item.id }}" class="px-4 py-2 bg-green-500 text-white hover:bg-green-700">
+                        Delivered
+                    </button>
+                </form>
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}

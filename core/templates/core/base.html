@@ -1,0 +1,240 @@
+{% load menu %}
+
+<!doctype html>
+
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <title>{% block title %}{% endblock %} | Artisan Afrique</title>
+
+        {% block meta %}
+        {% endblock %}
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+          
+        </style>
+    </head>
+
+    <body>
+        <nav class="w-full py-4 px-6 flex items-center justify-between bg-teal-600">
+            <div class="logo">
+                <a href="{% url 'home' %}" class="text-2xl text-white">Artisan Afrique</a>
+            </div>
+
+            <div class="search">
+                <form method="get" action="/search/" class="flex items-center space-x-4">
+                    <input type="search" name="query" placeholder="Search..." class="py-2 px-4 rounded-xl">
+                    
+                    <button>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-white">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                          </svg>                          
+                    </button>
+                </form>
+            </div>
+
+            <div class="menu flex items-center space-x-4">
+                {% menu %}
+
+                <!-- Cart Icon -->
+            
+
+
+                <a href="{% url 'cart_view' %}"><div class="relative py-2">
+                    <div class="t-0 absolute left-3">
+                      <p class="flex h-2 w-2 items-center justify-center rounded-full pl-3 pb-2 text-xs text-white">({{ cart|length }})</p>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="file: h-6 w-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                    </svg>
+                  </div>
+                </a>
+                <!-- Profile-->
+                {% if not request.user.is_authenticated %}
+                <div id="dropdown" class="relative inline-block">
+                    <button
+                      @click="isOpen = true"
+                      class="inline-flex items-center pl-6 pr-2 py-2 font-semibold text-white bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:shadow-outline active:bg-gray-900"
+                    >
+                      Account
+                      <svg
+                        class="ml-2 h-6 w-6 text-white"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M15.3 9.3a1 1 0 0 1 1.4 1.4l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 0 1 1.4-1.4l3.3 3.29 3.3-3.3z"
+                        />
+                      </svg>
+                    </button>
+
+                  
+                    <div
+                      v-if="isOpen"
+                      @click="isOpen = false"
+                      class="fixed inset-0"
+                      tabindex="-1"
+                    ></div>
+                  
+                  
+                    <transition
+                      enter-class="opacity-0 scale-90"
+                      enter-active-class="ease-out transition-fastest"
+                      enter-to-class="opacity-100 scale-100"
+                      leave-class="opacity-100 scale-100"
+                      leave-active-class="ease-in transition-fastest"
+                      leave-to-class="opacity-0 scale-90"
+                    >
+                      <div
+                        v-if="isOpen"
+                        class="mt-2 absolute right-0 origin-top-right text-left"
+                      >
+                            
+                          <div class="border-t-2 border-gray-200 py-1">
+                            <a href="{% url 'sign_up' %}" class="block px-6 py-3 leading-tight hover:bg-gray-200"
+                              >Sign Up</a
+                            >
+                          </div>
+                        </div></div>
+                      </div>
+                    </transition>
+                </div>
+
+                      <script src="https://unpkg.com/vue@^2.6/dist/vue.min.js"></script>
+                      <script>
+                        new Vue({
+                          el: '#dropdown',
+                          data: {
+                            isOpen: false
+                          }
+                        })
+                      </script>
+    
+
+                {% endif %}
+
+                
+                  
+                  
+                {% if request.user.is_authenticated %}
+                <div id="dropdown" class="relative inline-block">
+                  <button
+                  @click="isOpen = true"
+                  class="inline-flex items-center pl-6 pr-2 py-2 font-semibold text-white bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:shadow-outline active:bg-gray-900"
+                >
+                  Account
+                  <svg
+                    class="ml-2 h-6 w-6 text-white"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M15.3 9.3a1 1 0 0 1 1.4 1.4l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 0 1 1.4-1.4l3.3 3.29 3.3-3.3z"
+                    />
+                  </svg>
+                </button>
+
+                
+                
+                  <div
+                    v-if="isOpen"
+                    @click="isOpen = false"
+                    class="fixed inset-0"
+                    tabindex="-1"
+                  ></div>
+                
+                
+                  <transition
+                    enter-class="opacity-0 scale-90"
+                    enter-active-class="ease-out transition-fastest"
+                    enter-to-class="opacity-100 scale-100"
+                    leave-class="opacity-100 scale-100"
+                    leave-active-class="ease-in transition-fastest"
+                    leave-to-class="opacity-0 scale-90"
+                  >
+                    <div
+                      v-if="isOpen"
+                      class="mt-2 absolute right-0 origin-top-right text-left"
+                    >
+                      <div class="w-64 bg-white rounded-lg shadow-lg">
+                        <div class="flex items-center px-6 py-4">
+                          {% if user.profile.picture %}
+                              <img
+                                class="h-10 w-10 rounded-full flex-no-shrink"
+                                src="{{ user.profile.picture.url }}"
+                                alt="{{ user.username }}"
+                              />
+                          {% else %}
+                          <img
+                          class="h-10 w-10 rounded-full flex-no-shrink"
+                          src="https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg
+                          "
+                          alt=""
+                        />
+
+                          {% endif %}
+                          <div class="ml-4">
+                            <p class="font-semibold text-gray-900 leading-none">
+                              {{ user.username }}
+                            </p>
+                            <p>
+                              <a
+                                href="{% url 'edit_profile' %}"
+                                class="text-sm text-gray-600 leading-none hover:underline"
+                                >Edit Profile</a
+                              >
+                            </p>
+                          </div>
+                        </div>
+                        <div class="border-t-2 border-gray-200 py-1">
+                          <a href="#" class="block px-6 py-3 leading-tight hover:bg-gray-200"
+                            >Settings and Privacy</a
+                          >
+                          <a href="{% url 'my_chats' %}" class="block px-6 py-3 leading-tight hover:bg-gray-200">Chat</a>
+                        </div>
+                        <div class="border-t-2 border-gray-200 py-1">
+                          
+                          <a href="{% url 'haggle_history' %}"  class="block px-6 py-3 leading-tight hover:bg-gray-200"
+                          >Haggle History</a
+                        >
+
+                          <a href="{% url 'monitor_orders' %}" class="block px-6 py-3 leading-tight hover:bg-gray-200"
+                            >Monitor Purchase</a
+                          >
+                        </div>
+                        <form action="{% url 'logout' %}" method="post" class="border-t-2 border-gray-200 py-1">
+                          {% csrf_token %}
+                          <button type="submit" class="block w-full px-6 py-3 text-left leading-tight hover:bg-gray-200">
+                              Sign out
+                          </button>
+                      </form>                      </div>
+                    </div>
+                  </transition>
+                </div>
+                
+                <script src="https://unpkg.com/vue@^2.6/dist/vue.min.js"></script>
+                <script>
+                  new Vue({
+                    el: '#dropdown',
+                    data: {
+                      isOpen: false
+                    }
+                  })
+                </script>
+                                {% endif %}
+                
+            </div>
+        </nav>
+
+        <div class="max-w-4xl mx-auto py-4 px-6">
+            {% block content %}
+            {% endblock %}
+        </div>
+
+        {% block scripts %}
+        {% endblock %}
+    </body>
+</html>

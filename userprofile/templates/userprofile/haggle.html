@@ -1,0 +1,37 @@
+{% extends 'userprofile/base.html' %}
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-semibold mb-6">Haggles</h1>
+
+    <div class="overflow-x-auto">
+        <table class="table-auto w-full border-collapse border border-gray-800">
+            <thead>
+                <tr class="bg-gray-800 text-white">
+                    <th class="py-2 px-4">Customer Username</th>
+                    <th class="py-2 px-4">Product Name</th>
+                    <th class="py-2 px-4">Initial Price</th>
+                    <th class="py-2 px-4">Haggled Price</th>
+                    <th class="py-2 px-4">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for haggle in haggles %}
+                <tr class="{% cycle 'bg-gray-100' 'bg-gray-200' %}">
+                    <td class="py-2 px-4">{{ haggle.user.username }}</td>
+                    <td class="py-2 px-4">{{ haggle.product.title }}</td>
+                    <td class="py-2 px-4">₦{{ haggle.product.price }}</td>
+                    <td class="py-2 px-4">₦{{ haggle.proposed_price }}</td>
+                    <td class="py-2 px-4">
+                        <form action="{% url 'haggle_action' haggle.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" name="action" value="accept" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-2">Accept</button>
+                            <button type="submit" name="action" value="decline" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Decline</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

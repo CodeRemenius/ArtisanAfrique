@@ -1,0 +1,46 @@
+<!-- checkout.html -->
+{% extends 'core/base.html' %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-2">
+    <div class="flex justify-center">
+        <div class="bg-white rounded-lg shadow-lg border border-gray-300 p-6 w-1/2">
+            <h1 class="mb-6 text-2xl text-center">Checkout</h1>
+            <h2 class="text-xl text-gray-500 text-center">Total cost: ₦{{ cart.get_display_price }}</h2>
+            <form method="post" action="{% url 'checkout' %}" class="rounded-md p-4">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label for="first_name" class="block text-gray-700">First Name</label>
+                    <input type="text" id="first_name" name="first_name" class="bg-gray-100 rounded-md p-2 w-full" value="{{ initial_data.first_name }}" required>
+                </div>
+                <div class="mb-4">
+                    <label for="last_name" class="block text-gray-700">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" class="bg-gray-100 rounded-md p-2 w-full" value="{{ initial_data.last_name }}" required>
+                </div>
+                <div class="mb-4">
+                    <label for="address" class="block text-gray-700">Address</label>
+                    <textarea id="address" name="address" class="bg-gray-100 rounded-md p-2 w-full" required>{{ initial_data.address }}</textarea>
+                </div>
+                <div class="mb-4 flex justify-between">
+                    <label class="block text-gray-700">Payment Method</label>
+                    <div class="flex">
+                        <label for="payment_cod" class="inline-flex items-center mr-4">
+                            <input type="radio" id="payment_cod" name="payment_method" value="cod" class="mr-2" checked>
+                            Payment on Delivery
+                        </label>
+                        <label for="payment_online" class="inline-flex items-center">
+                            <input type="radio" id="payment_online" name="payment_method" value="online" class="mr-2">
+                            Payment Online
+                        </label>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <button type="submit" class="bg-teal-500 text-white px-4 py-2 rounded-md mx-auto block">Checkout</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

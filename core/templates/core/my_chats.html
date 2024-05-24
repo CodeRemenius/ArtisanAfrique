@@ -1,0 +1,16 @@
+{% extends 'core/base.html' %}
+
+{% block title %}My Chats{% endblock %}
+
+{% block content %}
+<div class="container mx-auto">
+    <h1 class="text-2xl font-semibold mb-4">Chats</h1>
+    <ul class="space-y-4">
+        {% for chat in chat_data %}
+            <li>
+                <a href="{{ chat.chat_url }}" class="block bg-white rounded-lg shadow-md px-4 py-3 hover:bg-gray-100 transition-colors">{{ chat.vendor_username }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

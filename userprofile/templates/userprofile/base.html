@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard{% endblock %}</title>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+          integrity="sha512-xLECL0OmdtzrVnEqOTGBnttVPtouMHOWPZwLwWgl9LOR/xriogXtkiVlKl4gMQWQ0OF1gV1ix6CjzZ5JN1vvYg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+</head>
+
+<body class="bg-gray-100 flex h-screen">
+    <!-- Sidebar -->
+    <div class="w-64 bg-gray-900 overflow-y-auto">
+        <div class="py-4">
+            <h2 class="text-white text-lg font-semibold px-4"><a href="{% url 'my_store' %}">Dashboard</a></h2>
+            <p class="text-gray-300 px-4">Logged in as: {{ request.user.username }}</p>
+        </div>
+
+        <ul class="sidebar-menu">
+            <!-- Add sidebar links here -->
+            <li>
+                <a href="#" class="block text-gray-300 hover:text-white flex items-center px-4 py-2">
+                    <i class="fas fa-shopping-bag text-white mr-2"></i>Product
+                </a>
+                <ul class="ml-8">
+                    <li><a href="{% url 'add_product' %}" class="block text-gray-300 hover:text-white pl-2 py-2"><i class="fas fa-plus-circle text-white mr-2"></i>Add Product</a></li>
+                    <li><a href="{% url 'my_products' %}" class="block text-gray-300 hover:text-white pl-2 py-2"><i class="fas fa-list text-white mr-2"></i>Product List</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" class="block text-gray-300 hover:text-white flex items-center px-4 py-2">
+                    <i class="fas fa-handshake text-white mr-2"></i>Haggle
+                </a>
+                <ul class="ml-8">
+                    <li><a href="{% url 'haggle_view' %}" class="block text-gray-300 hover:text-white pl-2 py-2"><i class="fas fa-history text-white mr-2"></i>View Haggle</a></li>
+                    <li><a href="{% url 'haggle_history_artisan' %}" class="block text-gray-300 hover:text-white pl-2 py-2"><i class="fas fa-history text-white mr-2"></i>Haggle History</a></li>
+                </ul>
+            </li>
+            <li><a href="{% url 'my_chats' vendor_username=user.username %}" class="block text-gray-300 hover:text-white flex items-center px-4 py-2"><i class="fas fa-comments text-white mr-2"></i>Chat</a></li>
+            <li><a href="{% url 'edit_profile_artisan' %}" class="block text-gray-300 hover:text-white flex items-center px-4 py-2"><i class="fas fa-user-edit text-white mr-2"></i>Edit Profile</a></li>
+            <li><a href="#" class="block text-gray-300 hover:text-white flex items-center px-4 py-2"><i class="fas fa-handshake text-white mr-2"></i>Deals</a></li>
+            <li><a href="{% url 'my_orders' %}" class="block text-gray-300 hover:text-white pl-10 py-2"><i class="fas fa-clock text-white mr-2"></i>Pending Deals</a></li>
+            <li><a href="{% url 'deal_history' %}" class="block text-gray-300 hover:text-white pl-10 py-2"><i class="fas fa-history text-white mr-2"></i>Deal History</a></li>
+            <li>
+                <form action="{% url 'logout_vendor' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="block text-gray-300 hover:text-white flex items-center px-4 py-2"><i class="fas fa-sign-out-alt text-white mr-2"></i>Logout</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+
+    <div class="flex-1 overflow-y-auto">
+        <!-- Main Content -->
+        <div class="container mx-4 px-4 py-8">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <!-- JavaScript for dropdown menu -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var dropdownToggles = document.querySelectorAll('.relative > a');
+            dropdownToggles.forEach(function (toggle) {
+                toggle.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var menu = this.nextElementSibling;
+                    menu.classList.toggle('hidden');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

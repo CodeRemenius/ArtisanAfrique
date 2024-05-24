@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>SignUp | ArtisanAfrique</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+          integrity="sha512-xLECL0OmdtzrVnEqOTGBnttVPtouMHOWPZwLwWgl9LOR/xriogXtkiVlKl4gMQWQ0OF1gV1ix6CjzZ5JN1vvYg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+</head>
+
+<body class="bg-white font-mono">
+    <div class="container min-w-full mx-0">
+        <div class="flex flex-col lg:flex-row">
+            <div class="lg:w-1/2 flex items-center justify-center bg-gray-100">
+                <!-- Sign Up Form Starts here-->
+                <div class="login-form bg-white shadow-md rounded-lg p-6 lg:w-3/4 xl:w-2/3">
+                    <div class="flex mb-4">
+                        <a href="{% url 'login' %}" id="loginLink" class="mr-4 mt-1  text-green-800 hover:text-green-900 font-bold ">Log In</a>
+                        <a href="{% url 'sign_up' %}" id="signupLink" class="text-green-800 hover:text-green-900 text-xl font-bold active">Sign Up</a>
+                    </div>
+                    {% if error_message %}
+                        <div class="mb-4 text-red-500 text-sm">
+                            {{ error_message }}
+                        </div>
+                    {% endif %}
+                    <form method="post" id="signupForm" class="form-visible">
+                            {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="fullname" class="block text-gray-600 text-xs font-bold mb-1">Full Name</label>
+                            <input type="text"
+                            class="bg-gray-200 appearance-none rounded-md w-full py-2 px-3 text-black-600 leading-tight focus:shadow-outline"
+                            id="fullname" name="fullname" oninput="checkForm()">
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="block text-gray-600 text-xs font-bold mb-1">Email</label>
+                            <input type="email"
+                            class="bg-gray-200 appearance-none rounded-md w-full py-2 px-3 text-black-600 leading-tight focus:shadow-outline"
+                            id="email" name="email" oninput="checkForm()">
+                        </div>
+                        <div class="mb-4">
+                            <label for="phone" class="block text-gray-600 text-xs font-bold mb-1">Phone Number</label>
+                            <input type="tel"
+                            class="bg-gray-200 appearance-none rounded-md w-full py-2 px-3 text-black-600 leading-tight focus:shadow-outline"
+                            id="phone" name="phone" oninput="checkForm()">
+                        </div>
+                        <div class="mb-4">
+                            <label for="address" class="block text-gray-600 text-xs font-bold mb-1">Address</label>
+                            <input type="text"
+                            class="bg-gray-200 appearance-none rounded-md w-full py-2 px-3 text-black-600 leading-tight focus:shadow-outline"
+                            id="address" name="address" oninput="checkForm()">
+                        </div>
+                        <div class="mb-4">
+                            <label for="signupUsername"
+                                   class="block text-gray-600 text-xs font-bold mb-1">Username</label>
+                            <input type="text"
+                            class="bg-gray-200 appearance-none rounded-md w-full py-2 px-3 text-black-600 leading-tight focus:shadow-outline"
+                            id="signupUsername" name="signupUsername" oninput="checkForm()">
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="signupPassword"
+                                   class="block text-gray-600 text-xs font-bold mb-1">Password</label>
+                            <input type="password"
+                            class="bg-gray-200 appearance-none rounded-md w-full py-2 px-3 text-black-600 leading-tight focus:shadow-outline"
+                            id="signupPassword" name="signupPassword" oninput="checkForm()">
+                        </div>
+                        <div class="text-right mb-2">
+                            <a href="forgot" class="text-xs text-green-900 underline">Forgot password?</a>
+                        </div>
+                        <div class="text-center my-2">
+                            <p class="text-xs text-gray-600">By clicking Sign Up, you accept ArtisanAfrique's Terms of Service
+                                and Privacy Policy</p>
+                        </div>
+
+                        <button type="button" id="signUpButton"
+                                class="bg-gray-300 hover:bg-gray-400 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full" disabled onclick="signup()">Sign
+                            Up
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="lg:w-1/2 bg-gray-900 p-0">
+                <!-- Aesthetic picture goes here -->
+                <img src="https://media.gettyimages.com/id/1401228241/photo/busy-market-street-in-lagos-nigeria-west-africa.jpg?s=612x612&w=0&k=20&c=aFPX9I9lZ_BzLpPQRg8fWORlbsbDD4_E5UWchjw1k1c=" alt="Aesthetic Picture" class="w-full h-screen object-cover">
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .form-hidden {
+            display: none;
+        }
+
+        .form-visible {
+            display: block;
+        }
+
+        #signupLink.active::after {
+            content: "";
+            border-bottom: 3px solid rgb(0, 45, 0);
+            display: block;
+            width: 20px;
+            border-radius: 15%;
+            margin: 0 auto;
+        }
+
+        #loginLink.active::after {
+            content: "";
+            border-bottom: 3px solid rgb(0, 45, 0);
+            display: block;
+            width: 20px;
+            border-radius: 15%;
+            margin: 0 auto;
+        }
+        #signUpButton {
+        transition: background-color 0.3s ease;
+    }
+
+
+    </style>
+<script>
+    function checkForm() {
+        var fullname = document.getElementById("fullname").value;
+        var email = document.getElementById("email").value;
+        var phone = document.getElementById("phone").value;
+        var address = document.getElementById("address").value;
+        var username = document.getElementById("signupUsername").value;
+        var password = document.getElementById("signupPassword").value;
+        var signUpButton = document.getElementById("signUpButton");
+
+        // Regular expression for phone number format (10 digits)
+        var phoneRegex = /^\d{11}$/;
+
+        if (fullname.trim() !== "" && email.trim() !== "" && phoneRegex.test(phone) && address.trim() !== "" && username.trim() !== "" && password.trim().length >= 7) {
+            signUpButton.classList.remove("bg-gray-300", "hover:bg-gray-400");
+            signUpButton.classList.add("bg-green-700", "hover:bg-green-800");
+            signUpButton.disabled = false; // Enable the button
+        } else {
+            signUpButton.classList.remove("bg-green-700", "hover:bg-green-800");
+            signUpButton.classList.add("bg-gray-300", "hover:bg-gray-400");
+            signUpButton.disabled = true; // Disable the button
+        }
+    }
+
+    function signup() {
+        document.getElementById("signupForm").submit();
+    }
+</script>
+
+</body>
+
+</html>

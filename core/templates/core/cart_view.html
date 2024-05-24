@@ -1,0 +1,55 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Cart{% endblock %}
+
+{% block content %}
+    <div class="container mx-auto">
+        <h1 class="mb-6 text-3xl font-semibold">Your Cart</h1>
+
+        {% if cart|length %}
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {% for item in cart %}
+                    <div class="p-4 bg-white rounded-lg shadow-md">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex-shrink-0">
+                                <img src="{{ item.product.get_thumbnail }}" alt="{{ item.product.title }}" class="w-24 h-24 object-cover rounded-lg">
+                            </div>
+                            <div class="ml-4 flex-grow">
+                                <h2 class="text-lg font-semibold">{{ item.product.title }}</h2>
+                                <p class="text-sm text-gray-600">Price: ₦{{ item.price }}</p>
+                                <div class="flex items-center mt-2">
+                                    <a href="{% url 'change_quantity' item.product.id %}?action=increase" class="px-3 py-1 bg-teal-500 text-white rounded-full hover:bg-teal-600">+</a>
+                                    <span class="mx-2">{{ item.quantity }}</span>
+                                    <a href="{% url 'change_quantity' item.product.id %}?action=decrease" class="px-3 py-1 bg-teal-500 text-white rounded-full hover:bg-teal-600">-</a>
+                                </div>
+                            </div>
+                            <a href="{% url 'remove_from_cart' item.product.id %}" class="ml-4 text-gray-500 hover:text-red-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </a>
+                        </div>
+                        <hr class="border-gray-300">
+                        <div class="text-right">
+                            <strong>Total: ₦{{ item.price }}</strong>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="mt-8 flex justify-end">
+                <strong class="mr-4">Total Cost:</strong>
+                <span class="text-xl font-semibold">₦{{ cart.get_display_price }}</span>
+            </div>
+
+            <div class="mt-4 flex justify-end">
+                <a href="{% url 'checkout' %}" class="px-6 py-3 bg-teal-500 text-white rounded-full hover:bg-teal-600">Proceed to Checkout</a>
+            </div>
+        {% else %}
+            <div class="p-6 bg-gray-200 text-center rounded-lg">
+                <p class="text-lg">Your cart is empty...</p>
+                <a href="{% url 'home' %}" class="mt-4 inline-block px-6 py-3 bg-teal-500 text-white rounded-full hover:bg-teal-600">Start Shopping</a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

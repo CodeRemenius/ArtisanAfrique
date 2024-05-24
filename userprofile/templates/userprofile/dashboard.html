@@ -1,0 +1,68 @@
+{% extends 'userprofile/base.html' %}
+
+{% block title %}My Store{% endblock %}
+
+{% block content %}
+    <h1 class="text-3xl text-center font-semibold mb-6">My Store</h1>
+
+    {% if messages %}
+        <div class="mb-6">
+            {% for message in messages %}
+                <div class="px-6 py-4 bg-teal-200 text-teal-800 mb-2 rounded-md">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">My Orders</h2>
+
+        <div class="flex flex-col">
+            <div class="flex border-b border-gray-200 py-2">
+                <div class="w-1/4">Order ID</div>
+                <div class="w-1/4">Title</div>
+                <div class="w-1/4">Quantity</div>
+                <div class="w-1/4">Total Cost</div>
+            </div>
+            {% for order_item in order_items %}
+                <div class="flex border-b border-gray-200 py-2">
+                    <div class="w-1/4"><a href="{% url 'my_store_order_detail' order_item.order.id %}">{{ order_item.order.id }}</a></div>
+                    <div class="w-1/4">{{ order_item.product.title }}</div>
+                    <div class="w-1/4">{{ order_item.quantity }}</div>
+                    <div class="w-1/4">₦{{ order_item.haggled_price|default:order_item.price }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <hr class="my-8">
+
+    <h2 class="text-2xl font-semibold mb-4">My Products</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {% if products %}
+            {% for product in products %}
+                <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <a href="{% url 'edit_product' product.id %}">
+                        <div class="relative overflow-hidden">
+                            {% if product.image %}
+                                <img class="w-full h-48 object-cover object-center" src="{{ product.image.url }}" alt="Image of {{ product.title }}">
+                            {% else %}
+                                <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-400 text-lg">No Image</div>
+                            {% endif %}
+                        </div>
+                        <div class="p-4">
+                            <h3 class="text-xl font-semibold text-gray-800">{{ product.title }}</h3>
+                            <p class="text-gray-600 text-sm mb-2">₦{{ product.get_display_price }}</p>
+                            <p class="text-gray-600 text-sm mb-4">{{ product.get_status_display }}</p>
+                            <p class="text-gray-600 text-sm"><strong>Category: </strong>{{ product.category }}</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-gray-600 text-lg mt-4 py-4 px-8 bg-gray-100 rounded-lg">You don't have any products yet...</p>
+        {% endif %}
+    </div>
+{% endblock %}

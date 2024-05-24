@@ -1,0 +1,46 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-semibold mb-4">Search Results for "{{ query }}"</h1>
+
+    <h2 class="text-xl font-semibold mb-2">Products</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {% for product in products %}
+            <a href="{% url 'product_detail' product.category.slug product.slug %}">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <img src="{{ product.get_thumbnail }}" alt="{{ product.title }}" class="h-36 w-full object-cover">
+                    <div class="p-4">
+                        <h2 class="text-xl font-semibold mb-2">{{ product.title }}</h2>
+                        <h3 class="text-l font-semibold mb-2">{{ product.category }}</h3>
+                        <div class="flex items-center text-gray-500 text-sm">
+                            <span class="mr-2">₦{{ product.get_display_price }}</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+
+    <h2 class="text-xl font-semibold my-4">Vendors</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {% for vendor in vendors %}
+            <a href="#">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    {% if vendor.profile_picture %}
+                        <img src="{{ vendor.profile_picture.url }}" alt="{{ vendor.fullname }}" class="h-36 w-full object-cover">
+                    {% else %}
+                        <img src="https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg" alt="" class="h-36 w-full object-cover">
+                    {% endif %}
+                    <div class="p-6">
+                        <h2 class="text-xl font-semibold mb-2">{{ vendor.fullname }}</h2>
+                        <h3 class="text-l font-semibold mb-2">{{ vendor.username }}</h3>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>    
+</div>
+{% endblock %}

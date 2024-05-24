@@ -1,0 +1,17 @@
+<!-- core/partials/products.html -->
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    {% for product in products %}
+    <a href="{% url 'product_detail' product.category.slug product.slug %}">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <img src="{{ product.get_thumbnail }}" alt="{{ product.title }}" class="h-48 w-full object-cover">
+            <div class="p-6">
+                <h2 class="text-xl font-semibold mb-2">{{ product.title }}</h2>
+                <h3 class="text-l font-semibold mb-2">{{ product.category }}</h3>
+                <div class="flex items-center text-gray-500 text-sm">
+                    <span class="mr-2">₦{{ product.get_display_price }}</span>
+                </div>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+</div>

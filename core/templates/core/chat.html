@@ -1,0 +1,23 @@
+<!-- chat.html -->
+{% extends 'core/base.html' %}
+
+{% block title %}Chat{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-2xl font-semibold mb-4">Chat between {{ user1.username }} and {{ user2.username }}</h1>
+    <div id="chat-window" class="chat-window bg-gray-100 p-4 rounded-lg" style="width: calc(100% - 10rem);"> <!-- Adjust the width here -->
+        {% for message in messages %}
+            <div  class="message {% if message.sender == user1 %}sent text-right{% else %}received text-left{% endif %} mb-4">
+                <p>{{ message.text }}</p>  <!-- Update this line -->
+                <span class="timestamp text-xs">{{ message.timestamp }}</span>
+            </div>
+        {% endfor %}
+    </div>
+    <form method="post" action="{% url 'chat_page' user1_username=user1.username user2_username=user2.username %}" id="message-form" class="mt-4" style="width: calc(100% - 2rem);">
+        {% csrf_token %}
+        <input type="text" id="message-input" name="message-input" class="border border-gray-300 rounded-lg px-4 py-2 mr-2 w-3/4" placeholder="Type your message...">
+        <button type="submit" class="bg-teal-500 text-white px-4 py-2 rounded-lg">Send</button>
+    </form>
+</div>
+{% endblock %}

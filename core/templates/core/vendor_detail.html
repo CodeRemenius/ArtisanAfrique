@@ -1,0 +1,26 @@
+<!-- user_profile.html -->
+{% extends 'core/base.html' %}
+
+{% block title %}{{ user_profile.username }}{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-semibold mb-6">{{ user_profile.username }}</h1>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    {% for product in products %}
+    <div class="bg-white overflow-hidden shadow-md rounded-lg">
+        <a href="{% url 'product_detail' product.category.slug product.slug %}">
+            {% if product.image %}
+            <div class="aspect-w-16 aspect-h-9">
+                <img class="object-cover w-full h-48" src="{{ product.image.url }}" alt="Image of {{ product.title }}">
+            </div>
+            {% endif %}
+            <div class="p-4">
+                <h2 class="text-xl font-semibold">{{ product.title }}</h2>
+                <p class="text-sm text-gray-600">${{ product.get_display_price }}</p>
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'userprofile/base.html' %}
+
+{% block title %}Chat{% endblock %}
+
+{% block content %}
+<div class="container mx-auto">
+    <h1 class="text-2xl font-semibold mb-4 text-center">Chat between {{ user1.username }} and {{ user2.username }}</h1>
+    <div id="chat-window" class="chat-window bg-gray-100 p-4 rounded-lg mx-auto" style="max-width: 800px;"> <!-- Adjust the width and max-width here -->
+        {% for message in messages %}
+            <div class="message {% if message.sender == user1 %}sent text-right{% else %}received text-left{% endif %} mb-4">
+                <p class="text-gray-800">{{ message.text }}</p> <!-- Update this line -->
+                <span class="timestamp text-xs text-gray-600">{{ message.timestamp }}</span>
+            </div>
+        {% endfor %}
+    </div>
+    <form method="post" action="{% url 'chat_vendor' user1_username=user1.username user2_username=user2.username %}" id="message-form" class="mt-4 mx-auto" style="max-width: 800px;"> <!-- Adjust the max-width here -->
+        {% csrf_token %}
+        <div class="flex items-center">
+            <input type="text" id="message-input" name="message-input" class="border border-gray-300 rounded-lg px-4 py-2 mr-2 flex-1" placeholder="Type your message..." required>
+            <button type="submit" class="bg-black text-white px-4 py-2 rounded-lg">Send</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
