@@ -1,12 +1,13 @@
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import logout,authenticate, login as auth_login
+from django.contrib.auth import logout, authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.db.models import Q,F
 from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse
+from userprofile.auth_backends import EmailBackend
 from .models import *
 from .cart import Cart
 
@@ -51,8 +52,11 @@ def login(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        # Authenticate user
-        user = authenticate(username=username, password=password)
+        email_backend = EmailBackend()
+
+        # Authenticate user using username
+        user = email_backend.authenticate(request,username=username, password=password)
+        print(user)
 
         if user is not None:
             # Check if the user is a vendor
@@ -64,7 +68,7 @@ def login(request):
                 pass
 
             # Login user and redirect to home page
-            auth_login(request, user)
+            auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
 
             # Associate the cart with the user if authenticated
             if request.user.is_authenticated:
@@ -79,7 +83,6 @@ def login(request):
     return render(request, 'core/login.html')
 
 #Home page
-@login_required
 def home(request):
     products = Product.objects.filter(status=Product.ACTIVE)[0:6]
     user = request.user
@@ -334,3 +337,33 @@ def haggle_history(request):
     haggles = Haggle.objects.filter(user=request.user)
 
     return render(request, 'core/haggle_history.html', {'haggles': haggles})
+
+
+def change_password_page1(request):
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        user = authenticate(username=request.user.username, password=password)
+        if user is not None:
+            return redirect('change_password_page2')
+        else:
+            return render(request, 'core/change_password_page.html', {'error_message': 'Incorrect password'})
+    return render(request, 'core/change_password_page.html')
+
+def change_password_page2(request):
+    if request.method == 'POST':
+        new_password = request.POST.get('new_password')
+        confirm_new_password = request.POST.get('confirm_new_password')
+        if new_password == confirm_new_password:
+            user = User.objects.get(username=request.user.username)
+            user.set_password(new_password)
+            user.save()
+            user_profile = UserProfile.objects.get(user=user)
+            user_profile.password = new_password
+            user_profile.save()
+            return redirect('change_password_success')
+        else:
+            return render(request, 'core/confirm_password_page.html', {'error_message': 'Passwords do not match'})
+    return render(request, 'core/confirm_password_page.html')
+
+def change_password_success(request):
+    return render(request, 'core/password_change_success.html')

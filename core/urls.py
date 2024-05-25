@@ -5,8 +5,8 @@ from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
-    path('home/', views.home, name='home'),
-    path('', views.login, name='login'),    
+    path('', views.home, name='home'),
+    path('login/', views.login, name='login'),    
     path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'), path('sign-up/', views.signup, name="sign_up"),
     path('about/', views.about, name='about'),
     path('search/', views.search, name='search'),
@@ -19,6 +19,9 @@ urlpatterns = [
     path('cart/success/', views.success, name='success'),
     path('edit-profile/', views.edit_profile, name='edit_profile'),
     path('my-chats/', views.my_chats, name='my_chats'),
+    path('change-password/', views.change_password_page1, name='change_password_page1'),
+    path('change-password/confirm/', views.change_password_page2, name='change_password_page2'),
+    path('change-password/success/', views.change_password_success, name='change_password_success'),
     path('haggle-history/', views.haggle_history, name='haggle_history'),
     path('vendor/<str:username>/', views.vendor_detail, name='vendor_detail'),
     path('haggle/<slug:product_slug>/', views.haggle, name='haggle'),

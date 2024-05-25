@@ -13,6 +13,7 @@ from core.models import *
 from core.forms import ProductForm
 from core.models import Product, OrderItem, Order
 from core.cart import Cart
+from .auth_backends import EmailBackend
 import json
 
 def haggle_view(request):
@@ -98,21 +99,23 @@ def signup(request):
 
 #Login Functionality
 def login(request):
-    #check if form is using method of POST
+    # check if form is using method of POST
     if request.method == 'POST':
-        username = request.POST.get('username')
+        email = request.POST.get('email')
         password = request.POST.get('password')
 
-        # Authenticate user
-        user = authenticate(username=username, password=password)
+        email_backend = EmailBackend()
 
+        # Authenticate user using email
+        user = email_backend.check(request, email=email, password=password)
+        
         if user is not None:
             try:
                 # Check if the user is a vendor
-                profile = UserProfile.objects.get(username=username)
+                profile = UserProfile.objects.get(email=email)
                 if profile.is_vendor:
                     # Login user and redirect to home page for vendors
-                    auth_login(request, user)
+                    auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                     return redirect('my_store')
                 else:
                     # Return suitable error message for non-vendors
@@ -120,10 +123,9 @@ def login(request):
             except ObjectDoesNotExist:
                 # Return suitable error message if UserProfile does not exist
                 return render(request, 'userprofile/login.html', {'error_message': 'Invalid username or password.'})
-
         else:
             # User authentication failed, show error message
-            return render(request, 'userprofile/login.html', {'error_message': 'Invalid username or password.'})
+            return render(request, 'userprofile/login.html', {'error_message': 'Invalid email or password.'})
 
     return render(request, 'userprofile/login.html')
 

@@ -1,6 +1,5 @@
 from django.db import models
-
-# Create your models here.
+from django.utils import timezone
 from statistics import mode
 from django.contrib.auth.models import User
 from django.db import models
@@ -93,10 +92,16 @@ class Order(models.Model):
     created_by = models.ForeignKey(User, related_name='orders', on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_completed = models.BooleanField(default=False)
+    date_completed = models.DateTimeField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if self.is_completed:
+            self.date_completed = timezone.now()
+        super().save(*args, **kwargs)
+
 
     def __str__(self):
         return f'Order {self.pk} - {self.first_name} {self.last_name}'
-
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
@@ -154,6 +159,12 @@ class Haggle(models.Model):
     is_accepted = models.BooleanField(default=False)
     is_rejected = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True)  # Optional, can be null initially
+
+    def save(self, *args, **kwargs):
+        if self.is_accepted or self.is_rejected:
+            self.updated_at = timezone.now()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.user.username} - {self.product.title} - NGN {self.proposed_price}"

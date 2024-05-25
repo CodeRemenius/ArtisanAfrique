@@ -37,10 +37,10 @@
                     <form method="post" action="{% url 'login_vendor' %}" id="loginForm" class="form-visible">
                         {% csrf_token %}
                         <div class="mb-4">
-                            <label for="username" class="block text-gray-600 text-xs font-bold mb-1">Shop Name</label>
+                            <label for="email" class="block text-gray-600 text-xs font-bold mb-1">Email</label>
                             <input type="text"
                                    class="bg-gray-200 appearance-none rounded-md w-full py-2 px-3 text-black-600 leading-tight focus:shadow-outline"
-                                   id="username" name="username" oninput="checkForm()">
+                                   id="email" name="email" oninput="checkForm()">
                         </div>
                         <div class="mb-2">
                             <label for="password" class="block text-gray-600 text-xs font-bold mb-1">Password</label>
@@ -108,11 +108,11 @@
 
     <script>
         function checkForm() {
-            var username = document.getElementById("username").value;
+            var email = document.getElementById("email").value;
             var password = document.getElementById("password").value;
             var loginButton = document.getElementById("loginButton");
 
-            if (username.trim() !== "" && password.trim() !== "") {
+            if (email.trim() !== "" && password.trim() !== "") {
                 loginButton.classList.remove("bg-gray-300", "hover:bg-gray-400");
                 loginButton.classList.add("bg-green-700", "hover:bg-green-800");
                 loginButton.disabled = false; // Enable the button

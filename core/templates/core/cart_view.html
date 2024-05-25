@@ -5,8 +5,13 @@
 {% block content %}
     <div class="container mx-auto">
         <h1 class="mb-6 text-3xl font-semibold">Your Cart</h1>
+            {% if not request.user.is_authenticated %}
+        <div class="p-6 bg-gray-200 text-center rounded-lg">
+            <p class="text-lg">Login to access Cart Features ...</p>
+            <a href="{% url 'login' %}" class="mt-4 inline-block px-6 py-3 bg-teal-500 text-white rounded-full hover:bg-teal-600">Go To Login</a>
+        </div>
 
-        {% if cart|length %}
+        {% elif cart|length %}
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {% for item in cart %}
                     <div class="p-4 bg-white rounded-lg shadow-md">
@@ -50,6 +55,6 @@
                 <p class="text-lg">Your cart is empty...</p>
                 <a href="{% url 'home' %}" class="mt-4 inline-block px-6 py-3 bg-teal-500 text-white rounded-full hover:bg-teal-600">Start Shopping</a>
             </div>
-        {% endif %}
+            {% endif %}
     </div>
 {% endblock %}

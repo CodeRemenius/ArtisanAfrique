@@ -20,10 +20,12 @@
                 {% if product.description %}
                 <p class="text-gray-700">{{ product.description }}</p>
                 {% endif %}
+                {% if request.user.is_authenticated %}
                 <div class="mt-8">
                     <a href="{% url 'haggle' product.slug %}" class="inline-block px-8 py-4 bg-teal-500 text-white">Haggle</a>
                     <a href="{% url 'chat_page' user.username product.user.username %}" class="inline-block ml-4 px-6 py-4 bg-gray-500 text-white">Chat with Vendor</a>
                 </div>
+                {% endif %}
             </div>
         </div>
         <div class="mt-12">
